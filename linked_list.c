@@ -87,9 +87,9 @@ int pop(node_t ** head){
 	
 	next_node = (*head)->next;
 	retval = (*head)->val;
+	free(*head);
 	*head = next_node;
 
-	free(*head);
 	return retval;
 }
 
