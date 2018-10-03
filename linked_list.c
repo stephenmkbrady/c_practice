@@ -10,6 +10,7 @@ typedef struct node {
 void print_list(node_t *);
 void append(node_t *, int);
 void push(node_t **, int);
+void push2(node_t *, int);
 int pop(node_t **);
 int pop2(node_t *);
 int main(int argc, char **argv){
@@ -23,13 +24,13 @@ int main(int argc, char **argv){
 
 	print_list(head);
 
-	push(&head, 12);
+	push2(head, 12);
 	print_list(head);
-	/*append(head, 21);*/
-	print_list(head);
-	pop(&head); 
-	/*pop2(head);*/
-	print_list(head);
+/*	append(head, 21);*/
+/*	print_list(head);*/
+/*	pop(&head); */
+	pop2(head);
+/*	print_list(head);*/
 	free(head);
 	return 0;
 }
@@ -92,7 +93,15 @@ int pop(node_t ** head){
 
 	return retval;
 }
+void push2(node_t *head, int val){
+	/*create your new node and malloc*/
+	node_t *new_node;
+	new_node = malloc(sizeof(node_t));
 
+	new_node->next = head;
+	new_node->val = val;
+	head = new_node;
+}
 int pop2(node_t *head){
 	int retval = -1;
 	node_t *next_node = NULL;
