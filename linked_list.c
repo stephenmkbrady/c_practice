@@ -9,6 +9,7 @@ typedef struct node {
 
 void print_list(node_t *);
 void append(node_t *, int);
+int remove_last(node_t *);
 void push(node_t **, int);
 void push2(node_t *, int);
 int pop(node_t **);
@@ -22,15 +23,20 @@ int main(int argc, char **argv){
 	}
 	head->val = 1;
 
+	print_list(head); /*1*/
+
+	push(&head, 12);
+	print_list(head); /*12 1*/
+	append(head, 21); /*12 1 21*/
+	push(&head, 99);  /*99 12 1 21*/
+	append(head, 55); /*99 12 1 21 55*/
+	print_list(head); 
+	pop(&head);       /*12 1 21 55*/
+	print_list(head);
+	remove_last(head); /*12 1 21*/
 	print_list(head);
 
-	push2(head, 12);
-	print_list(head);
-/*	append(head, 21);*/
-/*	print_list(head);*/
-/*	pop(&head); */
-	pop2(head);
-/*	print_list(head);*/
+	
 	free(head);
 	return 0;
 }
@@ -58,6 +64,30 @@ void append(node_t * head, int val){
 	current->next->val = val;
 	current->next->next = NULL;
 }
+
+/*
+ * Remove the last node from end of linked list
+ */
+int remove_last(node_t * head){
+	int retval = 0;
+	/* If only one node, next will be null, so free it and return */
+	if (head->next == NULL){
+		retval= head->val;
+		free(head);
+		return retval;
+	}
+
+	/*Go to second last node*/
+	node_t *current = head;
+	while (current->next->next != NULL){
+		current = current->next;
+	}
+
+	retval = current->next->val;
+	free(current->next);
+	current->next=NULL;
+	return retval;
+}
 /**
  * Push node onto start of list stack
  * - 1. Get the pointer to the head pointer, that's out next address
@@ -70,8 +100,8 @@ void push(node_t ** head, int val){
 	node_t * new_node;
 	new_node = malloc(sizeof(node_t));
 
-	new_node->next = *head;
 	new_node->val = val;
+	new_node->next = *head;
 	*head = new_node;
 }
 /**
@@ -93,26 +123,4 @@ int pop(node_t ** head){
 
 	return retval;
 }
-void push2(node_t *head, int val){
-	/*create your new node and malloc*/
-	node_t *new_node;
-	new_node = malloc(sizeof(node_t));
 
-	new_node->next = head;
-	new_node->val = val;
-	head = new_node;
-}
-int pop2(node_t *head){
-	int retval = -1;
-	node_t *next_node = NULL;
-	if(head == NULL){
-		return -1;
-	}
-
-	next_node = (head)->next;
-	retval = (head)->val;
-	*head = *next_node;
-	free(head);
-	return retval;
-
-}
